@@ -5,8 +5,8 @@ const fetchUrl = (url) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             // 模拟成功与失败
-            // Math.random() < .5
-            Math.random() < 1
+            Math.random() < .5
+            // Math.random() < 1
                 ? resolve({ code: 0, msg: `${url} 请求SUCCESS` })
                 : reject({ code: 1, msg: `${url} 请求FAILER` })
         }, 1000)
@@ -16,30 +16,28 @@ const fetchUrl = (url) => {
 const concurrentRequestRescursion = (urls, nums) => {
     // 并发池
     const threadPool = []
-    // 递归
+
+    // 递归，单一任务
     const recursionRequest = () => {
-        console.log('urls：', urls)
         // urls 长度为 0，退出递归
         if (!urls.length) return
-        if (threadPool.length < nums) {
-            const url = urls.shift()
-            // 发送请求，放入并发池
-            threadPool.push(url)
-            console.log('threadPool', threadPool)
-            fetchUrl(url).then((req) => {
-                console.log(`请求成功的链接：${url}`, req)
-                // 移出 并发池
-                threadPool.splice(threadPool.indexOf(url), 1)
-                return recursionRequest()
-            }).catch((e) => {
-                console.log(e)
-                // 移出 并发池
-                threadPool.splice(threadPool.indexOf(url), 1)
-                // 把 url 放回 urls，进行下次重试
-                urls.unshift(url)
-                return recursionRequest()
-            })
-        }
+        const url = urls.shift()
+
+        threadPool.push(url) // 发送请求，放入并发池
+
+        fetchUrl(url).then((req) => {
+            threadPool.splice(threadPool.indexOf(url), 1) // 移出 并发池
+
+            console.log(`请求成功的链接：${url}`, req)
+            return recursionRequest()
+        }).catch((e) => {
+            threadPool.splice(threadPool.indexOf(url), 1) // 移出 并发池
+
+            console.log(e)
+            // 把 url 放回 urls，进行下次重试
+            urls.unshift(url)
+            return recursionRequest()
+        })
     }
 
     // 首次启动
@@ -47,6 +45,16 @@ const concurrentRequestRescursion = (urls, nums) => {
     for (let i = 0; i < nums; i += 1) {
         recursionRequest()
     }
+
+    // 打印相关代码，与实现逻辑无关
+    let timer = null
+    timer = setInterval(() => {
+        console.log('threadPool', threadPool)
+        if (!threadPool.length) {
+            clearInterval(timer)
+            timer = null
+        }
+    }, 500)
 }
 
 concurrentRequestRescursion(urls, 3)
