@@ -99,6 +99,9 @@
 // 'promise2'
 
 
-// setTimeout5
+// setTimeout5:w
+
 // setTimeout0
 
+
+// 节流的使用场景？
