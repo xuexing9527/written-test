@@ -118,7 +118,6 @@ setTimeout(function(){
 // micro: ['p-1']
 // macro: [s: (l_68, 0s)]
 
-<<<<<<< HEAD
 // 'promise0'
 // 'promise2'
 
@@ -128,12 +127,12 @@ setTimeout(function(){
 // setTimeout0
 
 
-// 节流的使用场景？
-=======
 // 第6轮 stack: [s: (l_58, 10s), s: (l_67, 4s)] => s: (l_67, 4s)
 // stack: []
 // micro: []
 // macro: []
 
 ////// 这样也不行。如何想个办法，能无限的迭代下去又不觉得劳累思维呢？？？
->>>>>>> 5a1aa68a254386b440ea1a429243e8a305f74043
+
+
+// 节流的使用场景？
