@@ -54,10 +54,68 @@ function ArrayJumping(arr) {
     const max = getMax(arr)
     const maxIndex = arr.indexOf(max)
     console.log(max, maxIndex)
-    return arr;
+
+    /**
+     * 返回的是数组对应的值
+     * @param {number} startValue 
+     * @param {number} startIndex 
+     * @returns 
+     */
+    const main = (startValue, startIndex) => {
+        // 只要能跳到相同的下标，而不是 maxIndex 就证明永远跳不到原来的位置
+        let i = startIndex;
+        let j = startIndex;
+        let r = 0
+        const len = arr.length
+
+        // r 最多跳 max 次
+        while (r < startValue) {
+            r += 1
+            // 往右
+            if (i + 1 < len) { // 小于最大
+                i += 1
+            } else { // 从 0 开始
+                i = 0
+            }
+
+            // 往左
+            if (j - 1 > -1) { // 大于 -1，从 0 起
+                j -= 1
+            } else { // 从 len - 1 末尾开始
+                j = len - 1
+            }
+        }
+
+        return { left: { value: arr[j], vIndex: j }, right: { value: arr[i], vIndex: i } }
+    }
+    const objL = {}
+    const objR = {}
+    let steps = 0
+    while (true) {
+        steps += 1
+        const { left ,right } = main(max, maxIndex)
+        if (left.value === max || right.value === max) {
+            return steps
+        } else {
+            if (!objL[left.value]) {
+                objL[left.value] = 1
+            }
+            if (!objR[right.value]) {
+                objR[right.value] = 1
+            }
+            // 左右都跳过，没走到位，就不可能跳到
+            if (objL[left.value] && objR[right.value]) {
+                return -1
+            }
+        }
+    }
 }
 
-ArrayJumping([1, 2, 2, 1, 1, 4, 4, 3])
+console.log('steps', ArrayJumping([1, 2, 2, 1, 1, 4, 4, 3]))
 ArrayJumping([1])
 ArrayJumping(1)
-ArrayJumping([1, 2, 3, 4])
+console.log('steps', ArrayJumping([1, 2, 3, 4]))
+console.log('steps', ArrayJumping([2, 3, 5, 6, 1]))
+
+console.log('steps', ArrayJumping([1,2,3,4,2]))
+console.log('steps', ArrayJumping([1,7,1,1,1,1]))
