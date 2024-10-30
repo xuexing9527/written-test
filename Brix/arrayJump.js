@@ -99,12 +99,18 @@ function ArrayJumping(arr) {
         } else {
             if (!objL[left.value]) {
                 objL[left.value] = 1
+            } else {
+                objL[left.value] += 1
             }
             if (!objR[right.value]) {
                 objR[right.value] = 1
+            } else {
+                objR[right.value] += 1
             }
+            console.log(objL)
+            console.log(objR)
             // 左右都跳过，没走到位，就不可能跳到
-            if (objL[left.value] && objR[right.value]) {
+            if ((objL[left.value] >= 2) && (objR[right.value] >= 2)) {
                 return -1
             }
         }
