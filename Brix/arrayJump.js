@@ -48,13 +48,116 @@ function ArrayJumping(arr) {
             varOcg.sort()
             return Number(varOcg[varOcg.length - 1])
         }
-
     }
     // 找到唯一最大值
     const max = getMax(arr)
     const maxIndex = arr.indexOf(max)
     console.log('max: ', max)
     console.log('maxIndex: ', maxIndex)
+
+
+    /**
+     * 问题分析：
+     * 理论上，
+     * 极端情况最多跳 数组的每一个值都 访问一遍，最大的 steps = arr.length
+     * 最少就是 1 次
+     * 
+     * 计算每个值 跳到根据自身大小 向左右跳的 下个值 分别是谁
+     * 
+     * 根据第一次的左右值，谁能命中最大值的下标，谁就是第一次能跳到的，记录到数组中，并标记 steps 1
+     * 谁能命中第一次能跳到的值，谁就是第二次能跳到的，记录到数组中，并标记 steps 2
+     * 随能命中第二次能跳到的，谁就是第三次能跳到的，记录到数组中，并标记 steps 3
+     * ...
+     * 直到没人能命中 上一次的值，此时流局，数组长度不再增长，退出方法，跳跃结束 不能被命中...
+     * 
+     * 
+     */
+    // maxIndex
+    const canJumpArr = []
+    const jump = () => {
+        const payloadArray = []
+        arr.forEach((item, index) => {
+            // 从自身开始跳，item步数
+
+            let l = index;
+            let r = index;
+            // 跳 item 步
+            for (let i = 0; i < item; i += 1) {
+                // 向右
+                if (r + 1 < len) {
+                    r += 1
+                } else {
+                    r = 0
+                }
+                // 向左
+                if (l - 1 > -1) {
+                    l -= 1
+                } else {
+                    l = arr.length - 1
+                }
+            }
+            // 此时的 r，i 为 跳到的左右值
+            payloadArray.push({left: arr[l], right: arr[r]})
+        })
+
+        // 遍历 payloadArray，比较 是否有等于目标值 的
+    }
+
+
+
+     const mainJump2 = (startValue, startIndex) => {
+        let i = startIndex;
+        let j = startIndex;
+        let r = 0
+        const len = arr.length
+
+        // r 最多跳 startValue = max 次
+        while (r < startValue) {
+            r += 1
+            // 往右
+            if (i + 1 < len) { // 小于最大
+                i += 1
+            } else { // 从 0 开始
+                i = 0
+            }
+
+            // 往左
+            if (j - 1 > -1) { // 大于 -1，从 0 起
+                j -= 1
+            } else { // 从 len - 1 末尾开始
+                j = len - 1
+            }
+        }
+
+        // 出 循环 等于跳了一次，得到：
+        // 向左 和 向右的结果 的 index: j, i
+        const left = { matched: false, target: { value: arr[j], vIndex: j } };
+        const right = { matched: false, target: { value: arr[j], vIndex: j } };
+        return { node: { value: startValue, vIndex: startIndex }, left, right}
+    }
+
+    // 存放能跳到 目标值的 对象，
+    // 用值和下标作为 key = index，steps 作为值
+    // 这个对象不再增加长度，表示 数组不能再跳到指定值，而退出 递归
+    const canJumpToTarget1 = {}
+    let steps2 = 0
+
+    const recursion2 = (steps, targetIndex) => {
+        for (let i = 0; i < arr.length; i += 1) {
+            const { left, right } = mainJump(arr[i], i, max)
+
+            if ((left.target.vIndex === targetIndex) || (right.target.vIndex === targetIndex)) {
+                canJumpToTarget1[i] = steps + 1
+            } else {
+                const values = canJumpToTarget.keys()
+            }
+        }
+    }
+
+    steps += 1
+
+
+
 
     /**
      * 跳跃方法
@@ -104,6 +207,7 @@ function ArrayJumping(arr) {
 
     let steps = 0;
     // 第一次看谁能直接跳到 max
+    // max 的落脚点如果落不到这些值，就
     const canJumpToTarget = []
     for (let i = 0; i < arr.length; i += 1) {
         const { left, right } = mainJump(arr[i], i, max)
