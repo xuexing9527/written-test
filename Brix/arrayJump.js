@@ -73,12 +73,38 @@ function ArrayJumping(arr) {
      * 
      */
     // maxIndex
-    const canJumpArr = []
-    const jump = () => {
-        const payloadArray = []
-        arr.forEach((item, index) => {
-            // 从自身开始跳，item步数
 
+    /**
+     * 
+     * 
+     * 拼成一棵树，树层高最多为 arr.length
+     * max 为 root 结点
+     * 
+     */
+
+    // interface Node {
+    //     value: Number;
+    //     key: Number;
+    //     children: {
+    //         left: Node;
+    //         right: node;
+    //     }
+    // }
+
+
+
+
+
+    // 从第一个值开始跳，向左向右，直到跳到有相同位置出现
+    const createTree = () => {
+
+        const nodes = []
+        arr.forEach((item, index) => {
+
+            const len = arr.length
+            const node = { value: null, index: null, pNode: null, l: null, r: null }
+
+            // 从自身开始跳，item步数
             let l = index;
             let r = index;
             // 跳 item 步
@@ -96,266 +122,375 @@ function ArrayJumping(arr) {
                     l = arr.length - 1
                 }
             }
-            // 此时的 r，i 为 跳到的左右值
-            payloadArray.push({left: arr[l], right: arr[r]})
+            node.value = item
+            node.index = index
+            node.pNode = null
+            node.l = l
+            node.r = r
+
+            nodes.push(node)
         })
 
-        // 遍历 payloadArray，比较 是否有等于目标值 的
-    }
+        // const key = `${value}${index}`
+        const getKey = (node) => `${node.value}${node.index}`
 
+        
+        const root = nodes[maxIndex]
 
-
-     const mainJump2 = (startValue, startIndex) => {
-        let i = startIndex;
-        let j = startIndex;
-        let r = 0
-        const len = arr.length
-
-        // r 最多跳 startValue = max 次
-        while (r < startValue) {
-            r += 1
-            // 往右
-            if (i + 1 < len) { // 小于最大
-                i += 1
-            } else { // 从 0 开始
-                i = 0
-            }
-
-            // 往左
-            if (j - 1 > -1) { // 大于 -1，从 0 起
-                j -= 1
-            } else { // 从 len - 1 末尾开始
-                j = len - 1
-            }
-        }
-
-        // 出 循环 等于跳了一次，得到：
-        // 向左 和 向右的结果 的 index: j, i
-        const left = { matched: false, target: { value: arr[j], vIndex: j } };
-        const right = { matched: false, target: { value: arr[j], vIndex: j } };
-        return { node: { value: startValue, vIndex: startIndex }, left, right}
-    }
-
-    // 存放能跳到 目标值的 对象，
-    // 用值和下标作为 key = index，steps 作为值
-    // 这个对象不再增加长度，表示 数组不能再跳到指定值，而退出 递归
-    const canJumpToTarget1 = {}
-    let steps2 = 0
-
-    const recursion2 = (steps, targetIndex) => {
-        for (let i = 0; i < arr.length; i += 1) {
-            const { left, right } = mainJump(arr[i], i, max)
-
-            if ((left.target.vIndex === targetIndex) || (right.target.vIndex === targetIndex)) {
-                canJumpToTarget1[i] = steps + 1
-            } else {
-                const values = canJumpToTarget.keys()
-            }
-        }
-    }
-
-    steps += 1
-
-
-
-
-    /**
-     * 跳跃方法
-     * 
-     * 从第一个值开始，谁能向左或向右 直接跳到 目标值（起始是最大值）
-     * 
-     * 返回的是数组对应的值
-     * @param {number} startValue 
-     * @param {number} startIndex 
-     * @returns 
-     */
-    const mainJump = (startValue, startIndex, targetFirstIsMax) => {
-        // 只要能跳到相同的下标，而不是 maxIndex 就证明永远跳不到原来的位置
-        let i = startIndex;
-        let j = startIndex;
-        let r = 0
-        const len = arr.length
-
-        // r 最多跳 startValue = max 次
-        while (r < startValue) {
-            r += 1
-            // 往右
-            if (i + 1 < len) { // 小于最大
-                i += 1
-            } else { // 从 0 开始
-                i = 0
-            }
-
-            // 往左
-            if (j - 1 > -1) { // 大于 -1，从 0 起
-                j -= 1
-            } else { // 从 len - 1 末尾开始
-                j = len - 1
-            }
-        }
-
-        // 出 循环 等于跳了一次，得到：
-        // 向左 和 向右的结果 的 index: j, i
-        const left = { matched: false, target: { value: arr[j], vIndex: j } };
-        const right = { matched: false, target: { value: arr[j], vIndex: j } };
-        if (arr[j] === targetFirstIsMax) left.matched = true
-        if (arr[i] === targetFirstIsMax) right.matched = true
-        return { left, right}
-
-        // return { left: { nextStartVaule: arr[j], vIndex: j }, right: { nextStartVaule: arr[i], vIndex: i } }
-    }
-
-    let steps = 0;
-    // 第一次看谁能直接跳到 max
-    // max 的落脚点如果落不到这些值，就
-    const canJumpToTarget = []
-    for (let i = 0; i < arr.length; i += 1) {
-        const { left, right } = mainJump(arr[i], i, max)
-        // 无论谁命中了 target，就代表能跳到 目标值
-        if (left.matched || right.matched) {
-            canJumpToMax.push({ value: arr[i], vIndex: i })
-        }
-    }
-    steps += 1
-    // canJumpToTarget 这些值是 一次能跳到的
-
-    // 接受一个数组
-    const fun = (targetArr, arr, steps) => {
-        steps += 1
-        targetArr.forEach(item => {
-            const canJumpToTarget = []
-            for (let i = 0; i < arr.length; i += 1) {
-                const { left, right } = mainJump(arr[i], i, item.value)
-                // 无论谁命中了 target，就代表能跳到 目标值
-                if (left.matched || right.matched) {
-                    canJumpToTarget.push({ value: arr[i], vIndex: i })
+        const rescursion = (pNode, i, j) => {
+            if (i > arr.length) return
+            if (j > arr.length) return
+            i += 1
+            j += 1
+            nodes.forEach(item => {
+                if (getKey(root.l) === getKey(item)) {
+                    pNode.l = item
+                } else if (getKey(root.r === getKey(item))) {
+                    pNode.r = item
                 }
-            }
-        })
-        // 如果跳不到
-        if (!canJumpToTarget.length) {
-            return -1
-        } else {
-            // 如果这些跳到了
-            fun(canJumpToTarget, arr)
+            })
+            if (pNode.l) rescursion(pNode.l, i, j)
+            if (pNode.r) rescursion(pNode.r, i, j)
         }
+        rescursion(root, 0, 0)
+
+
+        console.log('root: ', root)
     }
 
-    fun(canJumpToTarget, arr)
+
+    createTree()
 
 
-
-    if (!canJumpToTarget.length) {
-        return -1
-    } else {
-        // 这些能跳到 max 的，谁能跳到他们
-        // 有长度，就继续跳
-        canJumpToTarget.forEach(item => {
-
-            const canJumpToTarget2 = []
-            for (let i = 0; i < arr.length; i += 1) {
-                const { left, right } = mainJump(arr[i], i, item.value)
-                // 无论谁命中了 target，就代表能跳到 目标值
-                if (left.matched || right.matched) {
-                    canJumpToMax.push({ value: arr[i], vIndex: i })
-                }
-            }
-
-            if (!canJumpToTarget2.length) {
-                return -1
-            } else {
-                // 接受一个数组
-                const fun = (targetArr, arr) => {
-                    targetArr.forEach(item => {
-                        const canJumpToTarget = []
-                        for (let i = 0; i < arr.length; i += 1) {
-                            const { left, right } = mainJump(arr[i], i, item.value)
-                            // 无论谁命中了 target，就代表能跳到 目标值
-                            if (left.matched || right.matched) {
-                                canJumpToTarget.push({ value: arr[i], vIndex: i })
-                            }
-                        }
-                    })
-                    // 如果跳不到
-                    if (!canJumpToTarget.length) {
-                        return -1
-                    } else {
-                        // 如果这些跳到了
-                        fun(canJumpToTarget, arr)
-                    }
-
-
-                    
-                    
-                }
-            }
-
-        })
-
-    }
-
-    // 如果循环结束都不能跳到，证明不可能跳到 目标值，return -1
-
-
-
-
-
-    const objL = {}
-    const objR = {}
-
-    // // 初始化第一步
-    // let steps = 0
-
-    // 每跳一次 多一个左右，除非左右的的 nextStartVaule === max 最大值，否则就继续跳，
-    // 如果向左跳到相同的 nextStartValue 了，而没有到 max，向左结束
-    // 同理，向右跳到相同的 nextStartValue 了，
-    // const recursion = (params) => {
-    //     if (params.left.startValue)
-    //     const { left, right } = main(params.left.nextStartVaule, params.left.vIndex)
-    //     const { left: left1, right: right1 } = main(params.right.nextStartVaule, params.right.vIndex)
-    //     recursion({ left, right })
-    //     recursion({ left1, right1 })
-    // }
-
-    while (true) {
-        // 第一跳
-        steps += 1
-        // const { left, right } = main(max, maxIndex)
-
-        // 第二跳
-        main(left.nextStartVaule, left.vIndex)
-        main(right.nextStartVaule, right.vIndex)
-
-        const { left, right } = cb(max, maxIndex)
-
-
-
-
-
-        // steps += 1
-        // const { left ,right } = main(max, maxIndex)
-        // if (left.value === max || right.value === max) {
-        //     return steps
-        // } else {
-        //     if (!objL[left.value]) {
-        //         objL[left.value] = 1
-        //     } else {
-        //         objL[left.value] += 1
-        //     }
-        //     if (!objR[right.value]) {
-        //         objR[right.value] = 1
-        //     } else {
-        //         objR[right.value] += 1
-        //     }
-        //     console.log('objL: ', objL)
-        //     console.log('objR: ', objR)
-        //     // 左右都跳过，没走到位，就不可能跳到
-        //     if ((objL[left.value] >= 10) && (objR[right.value] >= 10)) {
-        //         return -1
-        //     }
-        // }
-    }
 }
+
+//         const obj = { value: max, index: maxIndex, pNode: null, l: null, r: null }
+
+//         let l = index;
+//         let r = index;
+//         // 跳 item 步
+//         for (let i = 0; i < max; i += 1) {
+//             // 向右
+//             if (r + 1 < len) {
+//                 r += 1
+//             } else {
+//                 r = 0
+//             }
+//             // 向左
+//             if (l - 1 > -1) {
+//                 l -= 1
+//             } else {
+//                 l = arr.length - 1
+//             }
+//         }
+//         obj.l = l
+//         obj.r = r
+
+//     }
+
+
+
+
+
+//     const canJumpObj = {}
+//     const jump = (targetIndex, steps) => {
+//         steps += 1
+//         const payloadArray = []
+//         arr.forEach((item, index, canJumpObj) => {
+//             // 从自身开始跳，item步数
+
+//             const keysLen = Object.keys(canJumpObj).length
+//             let l = index;
+//             let r = index;
+//             // 跳 item 步
+//             for (let i = 0; i < item; i += 1) {
+//                 // 向右
+//                 if (r + 1 < len) {
+//                     r += 1
+//                 } else {
+//                     r = 0
+//                 }
+//                 // 向左
+//                 if (l - 1 > -1) {
+//                     l -= 1
+//                 } else {
+//                     l = arr.length - 1
+//                 }
+//             }
+//             // 此时的 r，i 为 跳到的左右值
+//             payloadArray.push({ index, l, r })
+//         })
+
+//         // 遍历 payloadArray，比较 是否有等于目标值 的 下标
+//         payloadArray.forEach((item, index) => {
+//             if ((item.l === targetIndex) || (item.r === targetIndex)) {
+//                 canJumpObj[index] = steps
+//             }
+//         })
+
+//         const nextArr = Object.keys(canJumpObj)
+//         if (nextArr.length !== keysLen) { // 如果有变化，证明有新值，可以继续
+//             jump()
+//         } else {
+//             // 如果执行到这里都没有新值，证明无法 再跳到目标值
+//             return
+
+//         }
+//     }
+
+
+
+//      const mainJump2 = (startValue, startIndex) => {
+//         let i = startIndex;
+//         let j = startIndex;
+//         let r = 0
+//         const len = arr.length
+
+//         // r 最多跳 startValue = max 次
+//         while (r < startValue) {
+//             r += 1
+//             // 往右
+//             if (i + 1 < len) { // 小于最大
+//                 i += 1
+//             } else { // 从 0 开始
+//                 i = 0
+//             }
+
+//             // 往左
+//             if (j - 1 > -1) { // 大于 -1，从 0 起
+//                 j -= 1
+//             } else { // 从 len - 1 末尾开始
+//                 j = len - 1
+//             }
+//         }
+
+//         // 出 循环 等于跳了一次，得到：
+//         // 向左 和 向右的结果 的 index: j, i
+//         const left = { matched: false, target: { value: arr[j], vIndex: j } };
+//         const right = { matched: false, target: { value: arr[j], vIndex: j } };
+//         return { node: { value: startValue, vIndex: startIndex }, left, right}
+//     }
+
+//     // 存放能跳到 目标值的 对象，
+//     // 用值和下标作为 key = index，steps 作为值
+//     // 这个对象不再增加长度，表示 数组不能再跳到指定值，而退出 递归
+//     const canJumpToTarget1 = {}
+//     let steps2 = 0
+
+//     const recursion2 = (steps, targetIndex) => {
+//         for (let i = 0; i < arr.length; i += 1) {
+//             const { left, right } = mainJump(arr[i], i, max)
+
+//             if ((left.target.vIndex === targetIndex) || (right.target.vIndex === targetIndex)) {
+//                 canJumpToTarget1[i] = steps + 1
+//             } else {
+//                 const values = canJumpToTarget.keys()
+//             }
+//         }
+//     }
+
+//     steps += 1
+
+
+
+
+//     /**
+//      * 跳跃方法
+//      * 
+//      * 从第一个值开始，谁能向左或向右 直接跳到 目标值（起始是最大值）
+//      * 
+//      * 返回的是数组对应的值
+//      * @param {number} startValue 
+//      * @param {number} startIndex 
+//      * @returns 
+//      */
+//     const mainJump = (startValue, startIndex, targetFirstIsMax) => {
+//         // 只要能跳到相同的下标，而不是 maxIndex 就证明永远跳不到原来的位置
+//         let i = startIndex;
+//         let j = startIndex;
+//         let r = 0
+//         const len = arr.length
+
+//         // r 最多跳 startValue = max 次
+//         while (r < startValue) {
+//             r += 1
+//             // 往右
+//             if (i + 1 < len) { // 小于最大
+//                 i += 1
+//             } else { // 从 0 开始
+//                 i = 0
+//             }
+
+//             // 往左
+//             if (j - 1 > -1) { // 大于 -1，从 0 起
+//                 j -= 1
+//             } else { // 从 len - 1 末尾开始
+//                 j = len - 1
+//             }
+//         }
+
+//         // 出 循环 等于跳了一次，得到：
+//         // 向左 和 向右的结果 的 index: j, i
+//         const left = { matched: false, target: { value: arr[j], vIndex: j } };
+//         const right = { matched: false, target: { value: arr[j], vIndex: j } };
+//         if (arr[j] === targetFirstIsMax) left.matched = true
+//         if (arr[i] === targetFirstIsMax) right.matched = true
+//         return { left, right}
+
+//         // return { left: { nextStartVaule: arr[j], vIndex: j }, right: { nextStartVaule: arr[i], vIndex: i } }
+//     }
+
+//     let steps = 0;
+//     // 第一次看谁能直接跳到 max
+//     // max 的落脚点如果落不到这些值，就
+//     const canJumpToTarget = []
+//     for (let i = 0; i < arr.length; i += 1) {
+//         const { left, right } = mainJump(arr[i], i, max)
+//         // 无论谁命中了 target，就代表能跳到 目标值
+//         if (left.matched || right.matched) {
+//             canJumpToMax.push({ value: arr[i], vIndex: i })
+//         }
+//     }
+//     steps += 1
+//     // canJumpToTarget 这些值是 一次能跳到的
+
+//     // 接受一个数组
+//     const fun = (targetArr, arr, steps) => {
+//         steps += 1
+//         targetArr.forEach(item => {
+//             const canJumpToTarget = []
+//             for (let i = 0; i < arr.length; i += 1) {
+//                 const { left, right } = mainJump(arr[i], i, item.value)
+//                 // 无论谁命中了 target，就代表能跳到 目标值
+//                 if (left.matched || right.matched) {
+//                     canJumpToTarget.push({ value: arr[i], vIndex: i })
+//                 }
+//             }
+//         })
+//         // 如果跳不到
+//         if (!canJumpToTarget.length) {
+//             return -1
+//         } else {
+//             // 如果这些跳到了
+//             fun(canJumpToTarget, arr)
+//         }
+//     }
+
+//     fun(canJumpToTarget, arr)
+
+
+
+//     if (!canJumpToTarget.length) {
+//         return -1
+//     } else {
+//         // 这些能跳到 max 的，谁能跳到他们
+//         // 有长度，就继续跳
+//         canJumpToTarget.forEach(item => {
+
+//             const canJumpToTarget2 = []
+//             for (let i = 0; i < arr.length; i += 1) {
+//                 const { left, right } = mainJump(arr[i], i, item.value)
+//                 // 无论谁命中了 target，就代表能跳到 目标值
+//                 if (left.matched || right.matched) {
+//                     canJumpToMax.push({ value: arr[i], vIndex: i })
+//                 }
+//             }
+
+//             if (!canJumpToTarget2.length) {
+//                 return -1
+//             } else {
+//                 // 接受一个数组
+//                 const fun = (targetArr, arr) => {
+//                     targetArr.forEach(item => {
+//                         const canJumpToTarget = []
+//                         for (let i = 0; i < arr.length; i += 1) {
+//                             const { left, right } = mainJump(arr[i], i, item.value)
+//                             // 无论谁命中了 target，就代表能跳到 目标值
+//                             if (left.matched || right.matched) {
+//                                 canJumpToTarget.push({ value: arr[i], vIndex: i })
+//                             }
+//                         }
+//                     })
+//                     // 如果跳不到
+//                     if (!canJumpToTarget.length) {
+//                         return -1
+//                     } else {
+//                         // 如果这些跳到了
+//                         fun(canJumpToTarget, arr)
+//                     }
+
+
+                    
+                    
+//                 }
+//             }
+
+//         })
+
+//     }
+
+//     // 如果循环结束都不能跳到，证明不可能跳到 目标值，return -1
+
+
+
+
+
+//     const objL = {}
+//     const objR = {}
+
+//     // // 初始化第一步
+//     // let steps = 0
+
+//     // 每跳一次 多一个左右，除非左右的的 nextStartVaule === max 最大值，否则就继续跳，
+//     // 如果向左跳到相同的 nextStartValue 了，而没有到 max，向左结束
+//     // 同理，向右跳到相同的 nextStartValue 了，
+//     // const recursion = (params) => {
+//     //     if (params.left.startValue)
+//     //     const { left, right } = main(params.left.nextStartVaule, params.left.vIndex)
+//     //     const { left: left1, right: right1 } = main(params.right.nextStartVaule, params.right.vIndex)
+//     //     recursion({ left, right })
+//     //     recursion({ left1, right1 })
+//     // }
+
+//     while (true) {
+//         // 第一跳
+//         steps += 1
+//         // const { left, right } = main(max, maxIndex)
+
+//         // 第二跳
+//         main(left.nextStartVaule, left.vIndex)
+//         main(right.nextStartVaule, right.vIndex)
+
+//         const { left, right } = cb(max, maxIndex)
+
+
+
+
+
+//         // steps += 1
+//         // const { left ,right } = main(max, maxIndex)
+//         // if (left.value === max || right.value === max) {
+//         //     return steps
+//         // } else {
+//         //     if (!objL[left.value]) {
+//         //         objL[left.value] = 1
+//         //     } else {
+//         //         objL[left.value] += 1
+//         //     }
+//         //     if (!objR[right.value]) {
+//         //         objR[right.value] = 1
+//         //     } else {
+//         //         objR[right.value] += 1
+//         //     }
+//         //     console.log('objL: ', objL)
+//         //     console.log('objR: ', objR)
+//         //     // 左右都跳过，没走到位，就不可能跳到
+//         //     if ((objL[left.value] >= 10) && (objR[right.value] >= 10)) {
+//         //         return -1
+//         //     }
+//         // }
+//     }
+// }
 
 // console.log('steps', ArrayJumping([1, 2, 2, 1, 1, 4, 4, 3]))
 // ArrayJumping([1])
