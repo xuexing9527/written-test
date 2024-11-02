@@ -93,16 +93,19 @@ function ArrayJumping(arr) {
 
 
 
+    // const key = `${value}${index}`
+    const getKey = (node) => `${node.value}${node.index}`
 
 
+    const nodes = []
+    const makeNode = (i) => ({ value: arr[i], index: i })
     // 从第一个值开始跳，向左向右，直到跳到有相同位置出现
     const createTree = () => {
 
-        const nodes = []
         arr.forEach((item, index) => {
 
             const len = arr.length
-            const node = { value: null, index: null, pNode: null, l: null, r: null }
+            const node = { value: null, index: null }
 
             // 从自身开始跳，item步数
             let l = index;
@@ -122,17 +125,14 @@ function ArrayJumping(arr) {
                     l = arr.length - 1
                 }
             }
-            node.value = item
-            node.index = index
-            node.pNode = null
-            node.l = l
-            node.r = r
-
-            nodes.push(node)
+            nodes.push({
+                value: item,
+                index,
+                l: makeNode(l),
+                r: makeNode(r)
+            })
         })
 
-        // const key = `${value}${index}`
-        const getKey = (node) => `${node.value}${node.index}`
 
         
         const root = nodes[maxIndex]
@@ -140,27 +140,54 @@ function ArrayJumping(arr) {
         const rescursion = (pNode, i, j) => {
             if (i > arr.length) return
             if (j > arr.length) return
-            i += 1
-            j += 1
             nodes.forEach(item => {
                 if (getKey(root.l) === getKey(item)) {
-                    pNode.l = item
+                    pNode.l = makeNode(item.index)
                 } else if (getKey(root.r === getKey(item))) {
-                    pNode.r = item
+                    pNode.r = makeNode(item.index)
                 }
             })
-            if (pNode.l) rescursion(pNode.l, i, j)
-            if (pNode.r) rescursion(pNode.r, i, j)
+            if (pNode.l) {
+                i += 1
+                rescursion(pNode.l, i, j)
+            }
+            if (pNode.r) {
+                rescursion(pNode.r, i, j)
+                j += 1
+            }
         }
         rescursion(root, 0, 0)
 
-
-        console.log('root: ', root)
+        console.log('root: ', JSON.stringify(root, '  '))
+        return root
     }
 
+    const root = createTree()
+    // 遍历 root，查看每个节点到 root 的步数
+    const findNode = (root, i, r) => {
+        // console.log('root', getKey(root))
+        // console.log('max', getKey(makeNode(maxIndex)))
+        if ((getKey(root) === getKey(makeNode(maxIndex)))
+            && (i !== 0)
+            && (r !== 0)
+        ) {
+            // console.log('i：', i)
+            // console.log('j：', r)
+            console.log('steps：', { steps: [i, r] })
+            return
+        }
+        if (root.l) {
+            i += 1
+            findNode(root.l, i, r)
+        }
+        if (root.r) {
+            r += 1
+            findNode(root.r, i, r)
+        }
 
-    createTree()
+    }
 
+    findNode(root, 0, 0)
 
 }
 
@@ -498,5 +525,8 @@ function ArrayJumping(arr) {
 // console.log('steps', ArrayJumping([1, 2, 3, 4]))
 // console.log('steps', ArrayJumping([2, 3, 5, 6, 1]))
 
-console.log('steps', ArrayJumping([1,2,3,4,2])) // 3
-console.log('steps', ArrayJumping([1,7,1,1,1,1])) // 2
+// console.log('steps', ArrayJumping([1,2,3,4,2])) // 3
+// console.log('steps', ArrayJumping([1,7,1,1,1,1])) // 2
+
+
+ArrayJumping([1,2,3,4,2]) // 3
