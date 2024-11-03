@@ -82,33 +82,35 @@ function ArrayJumping(arr) {
                 l = len - 1
             }
         }
-        console.log(l , r)
+        // console.log('l, r：', l , r)
+        // console.log('arr[l], arr[r]：', arr[l] , arr[r])
 
         return { l, r }
     }
     
-    const rescrsion = (steps, lLevel, rLevel, start) => {
-        if (lLevel === -1 && rLevel === -1) {
-            console.log('异常了...')
-            return 
-        }
+    let s = 0
+    let t = ''
+    const rescrsion = (steps, level, start, to) => {
+        // console.log(`总 level 步数 ${level}---- ,方向：${to}`)
+        if (level > arr.length) return
 
-        if (lLevel !== -1) lLevel += 1
-        if (rLevel !== -1) rLevel += 1
+        level += 1
         const { l, r } = goSteps(steps, start)
-        if (l === maxIndex || r === maxIndex) {
-            console.log('l Index：', l)
-            console.log('r Index：', r)
-            console.log('lLevel 步数：', lLevel)
-            console.log('rLevel 步数：', rLevel)
-            return
-        }
+        if ((l === maxIndex) || (r === maxIndex)) {
+            s = s ? (s > level ? level : s) : level
+            // console.log('l Index：', l)
+            // console.log('r Index：', r)
+            // console.log(`level 步数${s} --to: ${to}-- ：`)
+            // console.log(`level 步数 --to: ${to}-- ：`, level)
+            return 
+        } 
 
-        rescrsion(arr[l], lLevel, -1, l)
-        rescrsion(arr[r], -1, rLevel, r)
+        rescrsion(arr[l], level, l, to += 'l')
+        rescrsion(arr[r], level, r, to += 'r')
 
     }
-    rescrsion(max, 0, 0, maxIndex)
+    rescrsion(max, 0, maxIndex, 'start...')
+    return { s, t }
 
 }
 
@@ -116,8 +118,8 @@ function ArrayJumping(arr) {
 // ArrayJumping([1])
 // ArrayJumping(1)
 // console.log('steps', ArrayJumping([1, 2, 3, 4]))
-// console.log('steps', ArrayJumping([2, 3, 5, 6, 1]))
+console.log('steps', ArrayJumping([2, 3, 5, 6, 1])) // 2
 
-console.log('steps', ArrayJumping([1,2,3,4,2])) // 3
-// console.log('steps', ArrayJumping([1,7,1,1,1,1])) // 2
+console.log('steps', ArrayJumping([1, 2, 3, 4, 2])) // 3
+console.log('steps', ArrayJumping([1,7,1,1,1,1])) // 2
 
