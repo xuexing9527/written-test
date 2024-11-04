@@ -102,6 +102,8 @@ function ArrayJumping(arr) {
             // console.log('r Index：', r)
             // console.log(`level 步数${s} --to: ${to}-- ：`)
             // console.log(`level 步数 --to: ${to}-- ：`, level)
+            l === maxIndex ? to += '_last_l' : to += '_last_r'
+            t = to
             return 
         } 
 
