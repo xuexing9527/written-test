@@ -2,14 +2,14 @@
  * 多次调用，指定时间 ms 内只触发一次
  * 
  */
-const throttle = (callback, ms) => {
+const throttle = (callback, delay) => {
   // 定义一个上次调用时间
   let preTime = null
-  return () => {
-    // 大于 ms 才调用一次
-    if (!preTime || new Date().getTime() - preTime > ms) {
+  return (...args) => {
+    // 大于 delay 才调用一次
+    if (!preTime || new Date().getTime() - preTime > delay) {
       preTime = new Date().getTime()
-      callback && callback()
+      callback && callback.apply(this, args)
     }
   }
 }
