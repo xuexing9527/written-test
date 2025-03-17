@@ -23,3 +23,11 @@ setInterval(fun, 100)
  * windows.onresize
  * 
  */
+
+// 前沿
+// 后沿
+// 禁用前沿
+// 禁用后沿
+
+
+// 关于截流函数的测试
