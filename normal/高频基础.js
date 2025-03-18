@@ -31,3 +31,11 @@ setInterval(fun, 100)
 
 
 // 关于截流函数的测试
+
+
+// 防抖
+const debounce = () => {
+
+}
+
+// 数组扁平化
